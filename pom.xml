@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>spider-controller</module>
+        <module>spider-message</module>
+        <module>spider-util</module>
+        <module>spider-http-request</module>
+        <module>spider-storage</module>
+        <module>spider-handler</module>
+        <module>spider-save</module>
+        <module>spider-parser</module>
+        <module>spider-service</module>
+    </modules>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.4.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.farmer.async.spider</groupId>
+    <artifactId>parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+
+    <properties>
+        <spider.version>1.0-SNAPSHOT</spider.version>
+        <jackson.version>2.9.2</jackson.version>
+        <fastjson.version>1.2.23</fastjson.version>
+        <farmer.common.version>1.0-SNAPSHOT</farmer.common.version>
+        <okhttp.version>3.8.1</okhttp.version>
+        <netty.version>4.1.16.Final</netty.version>
+        <junit.version>4.12</junit.version>
+        <liquibase.version>3.5.1</liquibase.version>
+        <mysql.version>6.0.5</mysql.version>
+        <guava.verison>18.0</guava.verison>
+        <fastdfs.version>1.27-SNAPSHOT</fastdfs.version>
+        <httpclient.version>4.5.2</httpclient.version>
+        <jsoup.version>1.7.2</jsoup.version>
+        <mybatisboot.version>1.1.1</mybatisboot.version>
+        <mapper.version>3.3.6</mapper.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.farmer.async.spider</groupId>
+                <artifactId>spider-controller</artifactId>
+                <version>${spider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.farmer.async.spider</groupId>
+                <artifactId>spider-message</artifactId>
+                <version>${spider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.farmer.async.spider</groupId>
+                <artifactId>spider-util</artifactId>
+                <version>${spider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.farmer.async.spider</groupId>
+                <artifactId>spider-http-request</artifactId>
+                <version>${spider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.farmer.async.spider</groupId>
+                <artifactId>spider-save</artifactId>
+                <version>${spider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.farmer.async.spider</groupId>
+                <artifactId>spider-handler</artifactId>
+                <version>${spider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.farmer.async.spider</groupId>
+                <artifactId>spider-storage</artifactId>
+                <version>${spider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.farmer.async.spider</groupId>
+                <artifactId>spider-parser</artifactId>
+                <version>${spider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.farmer.common</groupId>
+                <artifactId>core</artifactId>
+                <version>${farmer.common.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquibase.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.verison}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.csource</groupId>
+                <artifactId>fastdfs-client-java</artifactId>
+                <version>${fastdfs.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${jsoup.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatisboot.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper</artifactId>
+                <version>${mapper.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+</project>

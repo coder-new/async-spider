@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/parent.iml" filepath="$PROJECT_DIR$/parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spider-controller/spider-controller.iml" filepath="$PROJECT_DIR$/spider-controller/spider-controller.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spider-handler/spider-handler.iml" filepath="$PROJECT_DIR$/spider-handler/spider-handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spider-http-request/spider-http-request.iml" filepath="$PROJECT_DIR$/spider-http-request/spider-http-request.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spider-message/spider-message.iml" filepath="$PROJECT_DIR$/spider-message/spider-message.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spider-parser/spider-parser.iml" filepath="$PROJECT_DIR$/spider-parser/spider-parser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spider-save/spider-save.iml" filepath="$PROJECT_DIR$/spider-save/spider-save.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spider-service/spider-service.iml" filepath="$PROJECT_DIR$/spider-service/spider-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spider-storage/spider-storage.iml" filepath="$PROJECT_DIR$/spider-storage/spider-storage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spider-util/spider-util.iml" filepath="$PROJECT_DIR$/spider-util/spider-util.iml" />
+    </modules>
+  </component>
+</project>
