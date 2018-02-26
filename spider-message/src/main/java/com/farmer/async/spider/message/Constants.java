@@ -14,4 +14,6 @@ public abstract class Constants {
     public static final String PARSER_QUEUE_NAME = "spider-parser-queue";
 
     public static final String SAVE_QUEUE_NAME = "spider-save-queue";
+
+    public static final String BLOGGER_QUEUE_NAME = "spider-blogger-queue";
 }

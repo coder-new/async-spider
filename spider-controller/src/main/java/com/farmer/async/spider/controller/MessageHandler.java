@@ -21,7 +21,6 @@ import com.farmer.async.spider.request.task.BloggerDocumentDownloadTask;
 import com.farmer.async.spider.request.task.BloggerHomeDownloadTask;
 import com.farmer.async.spider.request.task.BloggerRelationPageDownloadTask;
 import com.farmer.async.spider.request.task.HomePageHttpTask;
-import com.farmer.async.spider.save.dao.BloggerDao;
 import com.farmer.async.spider.save.message.BloggerRelationSaveMessage;
 import com.farmer.async.spider.save.message.BloggerSaveMessage;
 import com.farmer.async.spider.save.message.BloggerUidUpdateMessage;
@@ -34,8 +33,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.BlockingQueue;
 
 /**
  * @Author farmer-coder
@@ -137,7 +134,7 @@ public class MessageHandler {
 
                 break;
 
-            case MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_RELATION_SAVE:
+            case MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_SAVE:
                 BloggerRelationSaveMessage bloggerRelationSaveMessage
                         = JSON.parseObject(messageStr,BloggerRelationSaveMessage.class);
                 taskExecute.submit(new BloggerRelationSaveTask(bloggerRelationSaveMessage));

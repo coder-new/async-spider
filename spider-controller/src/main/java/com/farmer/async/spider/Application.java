@@ -19,5 +19,10 @@ public class Application {
         ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
 
         ApplicationContextHolder.setApplicationContext(applicationContext);
+
+        ApplicationStartInit applicationStartInit
+                = ApplicationContextHolder.getBean(ApplicationStartInit.class);
+
+        applicationStartInit.init();
     }
 }

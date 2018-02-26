@@ -10,6 +10,7 @@ import com.farmer.async.spider.save.dao.BloggerDao;
 import com.farmer.async.spider.save.entity.BloggerEntity;
 import com.farmer.async.spider.save.entity.QueueMessageEntity;
 import com.farmer.async.spider.save.mapper.QueueMessageMapper;
+import com.farmer.async.spider.service.BloggerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class BloggerSpiderEndPoint {
 
     @Autowired
     private ActiveMqMessageSend activeMqMessageSend;
+
+    @Autowired
+    private BloggerService bloggerService;
 
     @Autowired
     private QueueMessageMapper queueMessageMapper;
@@ -82,62 +86,31 @@ public class BloggerSpiderEndPoint {
 //        BloggerEntity entity = new BloggerEntity();
 //        entity.setBloggerUid("");
 //        entity.setBloggerName("liugh");
+//        entity.setIsRelation(0);
+//        entity.setFetchFolloweePage(0);
+//        entity.setFetchFollowerPage(0);
+//        entity.setMaxFolloweePage(-1);
+//        entity.setMaxFollowerPage(-1);
+//
 //        bloggerEntities.add(entity);
 
-        List<BloggerEntity> bloggerEntities = bloggerDao.queryUidNotNullBlogger();
+        List<BloggerEntity> bloggerEntities = new ArrayList<>();
+        BloggerEntity entity = bloggerDao.queryOneRelationZeroBlogger();
+        if (null == entity) {
+            LOGGER.info("***************no is relation zero!");
+            return;
+        }
+        bloggerEntities.add(entity);
+        //List<BloggerEntity> bloggerEntities = bloggerDao.queryIsRelationZeroBlogger();
         if (null != bloggerEntities && bloggerEntities.size() > 0) {
 
-            bloggerEntities.stream()
-                    .map(bloggerEntity -> generateFollowerMessage(bloggerEntity.getBloggerName(),bloggerEntity.getBloggerUid()))
-                    .forEach(bloggerRelationDownloadMessage -> {
+            for (int i=0;i<bloggerEntities.size();i++) {
+                BloggerEntity bloggerEntity = bloggerEntities.get(i);
+                bloggerService.sendDownLoadMessage(bloggerEntity);
+            }
 
-                        QueueMessageEntity queueMessageEntity = new QueueMessageEntity();
-                        queueMessageEntity.setQueueName(Constants.DOWNLOAD_QUEUE_NAME);
-                        queueMessageEntity.setMessageStr(JSON.toJSONString(bloggerRelationDownloadMessage));
-                        queueMessageMapper.insert(queueMessageEntity);
-
-                        activeMqMessageSend.sendMessage(bloggerRelationDownloadMessage,Constants.DOWNLOAD_QUEUE_NAME);
-                    });
-
-            bloggerEntities.stream()
-                    .map(bloggerEntity -> generateFolloweeMessage(bloggerEntity.getBloggerName(),bloggerEntity.getBloggerUid()))
-                    .forEach(bloggerRelationDownloadMessage -> {
-                        QueueMessageEntity queueMessageEntity = new QueueMessageEntity();
-                        queueMessageEntity.setQueueName(Constants.DOWNLOAD_QUEUE_NAME);
-                        queueMessageEntity.setMessageStr(JSON.toJSONString(bloggerRelationDownloadMessage));
-                        queueMessageMapper.insert(queueMessageEntity);
-                        activeMqMessageSend.sendMessage(bloggerRelationDownloadMessage,Constants.DOWNLOAD_QUEUE_NAME);
-                    });
         }
     }
 
-    private BloggerRelationDownloadMessage generateFollowerMessage(String bloggerName, String bloggerUid) {
 
-        BloggerRelationDownloadMessage bloggerRelationDownloadMessage = new BloggerRelationDownloadMessage();
-        bloggerRelationDownloadMessage.setMessageId(UUID.randomUUID().toString());
-        bloggerRelationDownloadMessage.setRequestId(UUID.randomUUID().toString());
-        bloggerRelationDownloadMessage.setMessageType(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_PAGE_DOWNLOAD);
-        bloggerRelationDownloadMessage.setBloggerRelationPageUrl("https://home.cnblogs.com/u/" + bloggerName + "/followers");
-        bloggerRelationDownloadMessage.setBloggerName(bloggerName);
-        bloggerRelationDownloadMessage.setBloggerUid(bloggerUid);
-        bloggerRelationDownloadMessage.setPageIndex(1);
-        bloggerRelationDownloadMessage.setFollower(true);
-
-        return bloggerRelationDownloadMessage;
-    }
-
-    private BloggerRelationDownloadMessage generateFolloweeMessage(String bloggerName, String bloggerUid) {
-
-        BloggerRelationDownloadMessage bloggerRelationDownloadMessage = new BloggerRelationDownloadMessage();
-        bloggerRelationDownloadMessage.setMessageId(UUID.randomUUID().toString());
-        bloggerRelationDownloadMessage.setRequestId(UUID.randomUUID().toString());
-        bloggerRelationDownloadMessage.setMessageType(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_PAGE_DOWNLOAD);
-        bloggerRelationDownloadMessage.setBloggerRelationPageUrl("https://home.cnblogs.com/u/" + bloggerName + "/followees");
-        bloggerRelationDownloadMessage.setBloggerName(bloggerName);
-        bloggerRelationDownloadMessage.setBloggerUid(bloggerUid);
-        bloggerRelationDownloadMessage.setPageIndex(1);
-        bloggerRelationDownloadMessage.setFollower(false);
-
-        return bloggerRelationDownloadMessage;
-    }
 }

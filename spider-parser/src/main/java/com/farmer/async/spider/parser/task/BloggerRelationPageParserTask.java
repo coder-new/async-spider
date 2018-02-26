@@ -43,7 +43,7 @@ public class BloggerRelationPageParserTask extends AbstractParserTask<List<Strin
         BloggerRelationSaveMessage bloggerRelationSaveMessage = new BloggerRelationSaveMessage();
         bloggerRelationSaveMessage.setMessageId(UUID.randomUUID().toString());
         bloggerRelationSaveMessage.setRequestId("");
-        bloggerRelationSaveMessage.setMessageType(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_RELATION_SAVE);
+        bloggerRelationSaveMessage.setMessageType(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_SAVE);
         bloggerRelationSaveMessage.setBloggerRelationEntities(bloggerRelationEntities);
 
         activeMqMessageSend.send(bloggerRelationSaveMessage);

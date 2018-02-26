@@ -10,17 +10,17 @@ import javax.persistence.Table;
 @Table(name = "spider_queue_message")
 public class QueueMessageEntity {
 
-    private Integer id;
+    private String id;
 
     private String queueName;
 
     private String messageStr;
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

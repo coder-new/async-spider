@@ -5,8 +5,8 @@ import com.farmer.async.spider.message.Constants;
 import com.farmer.async.spider.message.MessageType;
 import com.farmer.async.spider.message.definition.BaseMessage;
 import com.farmer.async.spider.message.persistence.IMessagePersistence;
-import com.farmer.async.spider.request.manager.BloggerRelationDownloadService;
-import com.farmer.async.spider.request.message.BloggerRelationDownloadMessage;
+import com.farmer.async.spider.service.BloggerService;
+import com.farmer.async.spider.service.message.BloggerMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -14,27 +14,27 @@ import org.springframework.stereotype.Component;
 /**
  * @Author farmer-coder
  * @Email aprimecoder@gmail.com
- * @Date Create at : 2018/2/4
+ * @Date Create at : 2018/2/25
  */
 @Component
-public class DownloadMessageHandler {
+public class BloggerMessageHandler {
+
+    @Autowired
+    private BloggerService bloggerService;
 
     @Autowired
     private IMessagePersistence iMessagePersistence;
 
-    @Autowired
-    private BloggerRelationDownloadService bloggerRelationDownloadService;
-
-    @JmsListener(destination = Constants.DOWNLOAD_QUEUE_NAME)
+    @JmsListener(destination = Constants.BLOGGER_QUEUE_NAME)
     public void receive(String messageStr) {
 
-        System.out.println("download message!" + messageStr);
+        System.out.println("blogger message!" + messageStr);
 
         BaseMessage baseMessage = JSON.parseObject(messageStr,BaseMessage.class);
         String messageType = baseMessage.getMessageType();
 
-        if (messageType.equals(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_PAGE_DOWNLOAD)) {
-            bloggerRelationDownloadService.handle(JSON.parseObject(messageStr,BloggerRelationDownloadMessage.class));
+        if (messageType.equals(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_BLOGGER)) {
+            bloggerService.handle(JSON.parseObject(messageStr,BloggerMessage.class));
         }
 
         iMessagePersistence.delete(baseMessage.getMessageId());

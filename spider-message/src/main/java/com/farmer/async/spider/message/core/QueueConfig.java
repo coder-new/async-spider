@@ -40,4 +40,11 @@ public class QueueConfig {
         return queue;
     }
 
+    @Bean("bloggerQueue")
+    public Queue bloggerQueue() {
+
+        ActiveMQQueue queue = new ActiveMQQueue(Constants.BLOGGER_QUEUE_NAME);
+        return queue;
+    }
+
 }

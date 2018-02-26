@@ -76,4 +76,52 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="com-farmer-async-spider-20180222-01" author="farmer.zz">
+        <dropColumn columnName="id" tableName="spider_queue_message"/>
+        <addColumn tableName="spider_queue_message">
+            <column name="id" remarks="message id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="com-farmer-async-spider-20180223-01" author="farmer.zz" >
+        <addColumn tableName="spider_blogger">
+            <column name="max_followee_page" remarks="" type="INT(10)"/>
+        </addColumn>
+        <addColumn tableName="spider_blogger">
+            <column name="max_follower_page" remarks="" type="INT(10)"/>
+        </addColumn>
+        <addColumn tableName="spider_blogger">
+            <column name="fetch_followee_page" remarks="" type="INT(10)"/>
+        </addColumn>
+        <addColumn tableName="spider_blogger">
+            <column name="fetch_follower_page" remarks="" type="INT(10)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="com-farmer-async-spider-20180223-02" author="farmer.zz">
+        <addDefaultValue columnDataType="int" columnName="max_followee_page"
+                         defaultValueNumeric="0" tableName="spider_blogger"/>
+        <addDefaultValue columnDataType="int" columnName="max_follower_page"
+                         defaultValueNumeric="0" tableName="spider_blogger"/>
+        <addDefaultValue columnDataType="int" columnName="fetch_followee_page"
+                         defaultValueNumeric="0" tableName="spider_blogger"/>
+        <addDefaultValue columnDataType="int" columnName="fetch_follower_page"
+                         defaultValueNumeric="0" tableName="spider_blogger"/>
+    </changeSet>
+
+    <changeSet id="com-farmer-async-spider-20180223-03" author="farmer.zz">
+        <addDefaultValue columnDataType="int" columnName="is_relation"
+                         defaultValueNumeric="0" tableName="spider_blogger"/>
+    </changeSet>
+
+    <changeSet id="com-farmer-async-spider-20180224-02" author="farmer.zz">
+        <addDefaultValue columnDataType="int" columnName="max_followee_page"
+                         defaultValue="-1" tableName="spider_blogger"/>
+        <addDefaultValue columnDataType="int" columnName="max_follower_page"
+                         defaultValue="-1" tableName="spider_blogger"/>
+    </changeSet>
+
+
 </databaseChangeLog>

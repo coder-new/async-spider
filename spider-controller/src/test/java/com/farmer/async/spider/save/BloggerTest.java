@@ -58,4 +58,19 @@ public class BloggerTest {
 
         bloggerDao.updateBloggerUid("test","123edafjhgc");
     }
+
+    @Test
+    public void testQueryIsRelationZeroBlogger() {
+
+        List<BloggerEntity> bloggerEntities = bloggerDao.queryIsRelationZeroBlogger();
+        System.out.println(bloggerEntities.size());
+    }
+
+    @Test
+    public void testQueryOneRelationZeroBlogger() {
+
+        BloggerEntity bloggerEntity = bloggerDao.queryOneRelationZeroBlogger();
+
+        System.out.println("");
+    }
 }

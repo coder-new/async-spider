@@ -45,7 +45,9 @@ public abstract class MessageType {
 
             public static final String CNBLOG_BLOGGER_RELATION_PAGE_PARSER = CNBLOG_BLOGGER_RELATION_PRE + 2;
 
-            public static final String CNBLOG_BLOGGER_RELATION_RELATION_SAVE = CNBLOG_BLOGGER_RELATION_PRE + 3;
+            public static final String CNBLOG_BLOGGER_RELATION_SAVE = CNBLOG_BLOGGER_RELATION_PRE + 3;
+
+            public static final String CNBLOG_BLOGGER_RELATION_BLOGGER = CNBLOG_BLOGGER_RELATION_PRE + 4;
         }
     }
 }

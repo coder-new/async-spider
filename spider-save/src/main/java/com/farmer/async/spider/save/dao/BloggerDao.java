@@ -2,6 +2,7 @@ package com.farmer.async.spider.save.dao;
 
 import com.farmer.async.spider.save.entity.BloggerEntity;
 import com.farmer.async.spider.save.mapper.BloggerMapper;
+import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,40 @@ public class BloggerDao {
         bloggerMapper.insertList(entities);
     }
 
+    public void save(BloggerEntity bloggerEntity) {
+
+        BloggerEntity entity = queryByBloggerName(bloggerEntity.getBloggerName());
+        if (null == entity) {
+            bloggerMapper.insert(bloggerEntity);
+        }
+    }
+
+    public List<BloggerEntity> queryIsRelationZeroBlogger() {
+
+        Example example = new Example(BloggerEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+
+        criteria.andEqualTo("isRelation",0);
+
+        return bloggerMapper.selectByExample(example);
+    }
+
+    public BloggerEntity queryOneRelationZeroBlogger() {
+
+        Example example = new Example(BloggerEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("isRelation",0);
+
+        List<BloggerEntity> bloggerEntities
+                =  bloggerMapper.selectByExampleAndRowBounds(example,new RowBounds(0, 1));
+
+        if (bloggerEntities.size() > 0) {
+            return bloggerEntities.get(0);
+        }
+
+        return null;
+    }
+
     public List<BloggerEntity> queryUidNullBlogger() {
 
         Example example = new Example(BloggerEntity.class);
@@ -51,6 +86,19 @@ public class BloggerDao {
         criteria.andIsNotNull("bloggerUid");
 
         return bloggerMapper.selectByExample(example);
+    }
+
+    public BloggerEntity queryByBloggerName(String bloggerName) {
+
+        Example example = new Example(BloggerEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("bloggerName",bloggerName);
+
+        List<BloggerEntity> bloggerEntities = bloggerMapper.selectByExample(example);
+        if ((null == bloggerEntities) || bloggerEntities.size() == 0) {
+            return null;
+        }
+        return bloggerEntities.get(0);
     }
 
     public void updateBloggerUid(String bloggerName,String bloggerUid) {
@@ -77,9 +125,18 @@ public class BloggerDao {
             List<BloggerEntity> existEntities = bloggerMapper.selectByExample(example);
             if (existEntities.size() == 0) {
                 entities.add(bloggerEntity);
-        }
+            }
         }
 
         return entities;
+    }
+
+    public void updateBloggerEntity(BloggerEntity bloggerEntity,Integer id) {
+
+        Example example = new Example(BloggerEntity.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("id",id);
+
+        bloggerMapper.updateByExampleSelective(bloggerEntity,example);
     }
 }

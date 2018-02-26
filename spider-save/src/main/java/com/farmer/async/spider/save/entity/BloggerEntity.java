@@ -18,6 +18,16 @@ public class BloggerEntity {
 
     private String bloggerUid;
 
+    private Integer isRelation;
+
+    private Integer maxFolloweePage;
+
+    private Integer maxFollowerPage;
+
+    private Integer fetchFolloweePage;
+
+    private Integer fetchFollowerPage;
+
     @Override
     public String toString() {
 
@@ -54,5 +64,45 @@ public class BloggerEntity {
 
     public void setBloggerUid(String bloggerUid) {
         this.bloggerUid = bloggerUid;
+    }
+
+    public Integer getMaxFolloweePage() {
+        return maxFolloweePage;
+    }
+
+    public void setMaxFolloweePage(Integer maxFolloweePage) {
+        this.maxFolloweePage = maxFolloweePage;
+    }
+
+    public Integer getMaxFollowerPage() {
+        return maxFollowerPage;
+    }
+
+    public void setMaxFollowerPage(Integer maxFollowerPage) {
+        this.maxFollowerPage = maxFollowerPage;
+    }
+
+    public Integer getFetchFolloweePage() {
+        return fetchFolloweePage;
+    }
+
+    public void setFetchFolloweePage(Integer fetchFolloweePage) {
+        this.fetchFolloweePage = fetchFolloweePage;
+    }
+
+    public Integer getFetchFollowerPage() {
+        return fetchFollowerPage;
+    }
+
+    public void setFetchFollowerPage(Integer fetchFollowerPage) {
+        this.fetchFollowerPage = fetchFollowerPage;
+    }
+
+    public Integer getIsRelation() {
+        return isRelation;
+    }
+
+    public void setIsRelation(Integer isRelation) {
+        this.isRelation = isRelation;
     }
 }

@@ -2,16 +2,13 @@ package com.farmer.async.spider.message.core;
 
 import com.alibaba.fastjson.JSON;
 import com.farmer.async.spider.message.Constants;
-import com.farmer.async.spider.message.MessageType;
 import com.farmer.async.spider.message.definition.BaseMessage;
+import com.farmer.async.spider.message.persistence.IMessagePersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.jms.JMSException;
-import javax.jms.Message;
 import javax.jms.Queue;
-import javax.jms.Session;
 
 /**
  * @Author farmer-coder
@@ -36,6 +33,14 @@ public class ActiveMqMessageSend {
     @Autowired
     private Queue saveQueue;
 
+    @Autowired
+    private Queue bloggerQueue;
+
+    @Autowired
+    private IMessagePersistence iMessagePersistence;
+
+    @Autowired
+    private MessageCountManager messageCountManager;
 
     public void send(BaseMessage baseMessage) {
 
@@ -44,25 +49,39 @@ public class ActiveMqMessageSend {
         jmsTemplate.convertAndSend(messageQueue,messageStr);
     }
 
-    public void sendMessage(BaseMessage baseMessage,String destination) {
+    public void sendMessageWithPersistence(BaseMessage baseMessage,String destination) {
 
-        String messageStr;
+        String messageStr = JSON.toJSONString(baseMessage);
+        iMessagePersistence.persistence(baseMessage.getMessageId(),destination,messageStr);
+        sendMessage(messageStr,destination);
+    }
+
+    public void sendMessageWithoutPersistence(String messageStr,String destination) {
+
+        sendMessage(messageStr,destination);
+    }
+
+    private void sendMessage(String messageStr,String destination) {
+
         switch (destination) {
 
             case Constants.SAVE_QUEUE_NAME:
-                messageStr = JSON.toJSONString(baseMessage);
                 jmsTemplate.convertAndSend(saveQueue,messageStr);
                 break;
             case Constants.DOWNLOAD_QUEUE_NAME:
-                messageStr = JSON.toJSONString(baseMessage);
                 jmsTemplate.convertAndSend(downloadQueue,messageStr);
                 break;
             case Constants.PARSER_QUEUE_NAME:
-                messageStr = JSON.toJSONString(baseMessage);
                 jmsTemplate.convertAndSend(parserQueue,messageStr);
+                break;
+            case Constants.BLOGGER_QUEUE_NAME:
+                jmsTemplate.convertAndSend(bloggerQueue,messageStr);
                 break;
             default:
                 System.out.println("");
         }
+
+        messageCountManager.increment();
+
     }
 }

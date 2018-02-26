@@ -58,15 +58,15 @@ public class TestMessage {
 
         BaseMessage baseMessage1 = new BaseMessage();
         baseMessage1.setRequestId("1");
-        activeMqMessageSend.sendMessage(baseMessage1,Constants.DOWNLOAD_QUEUE_NAME);
+        //activeMqMessageSend.sendMessage(baseMessage1,Constants.DOWNLOAD_QUEUE_NAME);
 
         BaseMessage baseMessage2 = new BaseMessage();
         baseMessage2.setRequestId("2");
-        activeMqMessageSend.sendMessage(baseMessage2,Constants.PARSER_QUEUE_NAME);
+        //activeMqMessageSend.sendMessage(baseMessage2,Constants.PARSER_QUEUE_NAME);
 
         BaseMessage baseMessage3 = new BaseMessage();
         baseMessage3.setRequestId("3");
-        activeMqMessageSend.sendMessage(baseMessage3,Constants.SAVE_QUEUE_NAME);
+        //activeMqMessageSend.sendMessage(baseMessage3,Constants.SAVE_QUEUE_NAME);
     }
 
 }
