@@ -2,6 +2,7 @@ package com.farmer.async.spider.request.util;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -19,5 +20,11 @@ public class RestTemplateConfig {
         RestTemplate restTemplate = new RestTemplate();
 
         return restTemplate;
+    }
+
+    @Bean
+    public AsyncRestTemplate asyncRestTemplate() {
+
+        return new AsyncRestTemplate();
     }
 }

@@ -25,7 +25,7 @@ public class DownloadMessageHandler {
     @Autowired
     private BloggerRelationDownloadService bloggerRelationDownloadService;
 
-    @JmsListener(destination = Constants.DOWNLOAD_QUEUE_NAME)
+    @JmsListener(destination = Constants.DOWNLOAD_QUEUE_NAME,id = "down-1")
     public void receive(String messageStr) {
 
         System.out.println("download message!" + messageStr);

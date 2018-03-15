@@ -48,6 +48,8 @@ public abstract class MessageType {
             public static final String CNBLOG_BLOGGER_RELATION_SAVE = CNBLOG_BLOGGER_RELATION_PRE + 3;
 
             public static final String CNBLOG_BLOGGER_RELATION_BLOGGER = CNBLOG_BLOGGER_RELATION_PRE + 4;
+
+            public static final String CNBLOG_BLOGGER_RELATION_BLOGGER_LIST = CNBLOG_BLOGGER_RELATION_PRE + 5;
         }
     }
 }

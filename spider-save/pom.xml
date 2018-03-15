@@ -44,6 +44,11 @@
             <artifactId>mapper</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.farmer.async.spider</groupId>
+            <artifactId>spider-cache</artifactId>
+        </dependency>
+
     </dependencies>
 
 

@@ -6,6 +6,7 @@ import com.farmer.async.spider.message.MessageType;
 import com.farmer.async.spider.message.definition.BaseMessage;
 import com.farmer.async.spider.message.persistence.IMessagePersistence;
 import com.farmer.async.spider.service.BloggerService;
+import com.farmer.async.spider.service.message.BloggerListMessage;
 import com.farmer.async.spider.service.message.BloggerMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
@@ -35,6 +36,8 @@ public class BloggerMessageHandler {
 
         if (messageType.equals(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_BLOGGER)) {
             bloggerService.handle(JSON.parseObject(messageStr,BloggerMessage.class));
+        } else if (messageType.equals(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_BLOGGER_LIST)) {
+            bloggerService.handleList(JSON.parseObject(messageStr, BloggerListMessage.class));
         }
 
         iMessagePersistence.delete(baseMessage.getMessageId());

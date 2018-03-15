@@ -13,6 +13,7 @@
         <module>spider-save</module>
         <module>spider-parser</module>
         <module>spider-service</module>
+        <module>spider-cache</module>
     </modules>
 
     <parent>
@@ -94,6 +95,12 @@
             <dependency>
                 <groupId>com.farmer.async.spider</groupId>
                 <artifactId>spider-parser</artifactId>
+                <version>${spider.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.farmer.async.spider</groupId>
+                <artifactId>spider-cache</artifactId>
                 <version>${spider.version}</version>
             </dependency>
 
@@ -189,4 +196,6 @@
 
         </dependencies>
     </dependencyManagement>
+
+
 </project>

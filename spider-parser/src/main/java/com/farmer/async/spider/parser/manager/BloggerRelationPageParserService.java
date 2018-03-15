@@ -62,6 +62,8 @@ public class BloggerRelationPageParserService {
 
     private void sendBloggerMessage(List<String> bloggerList) {
 
+        List<BloggerEntity> bloggerEntities = new ArrayList<>();
+
         for (String bloggerName : bloggerList) {
 
             BloggerEntity bloggerEntity = new BloggerEntity();
@@ -73,13 +75,28 @@ public class BloggerRelationPageParserService {
             bloggerEntity.setFetchFollowerPage(0);
             bloggerEntity.setFetchFolloweePage(0);
 
-            BloggerMessage bloggerMessage = new BloggerMessage();
-            bloggerMessage.setBloggerEntity(bloggerEntity);
-            bloggerMessage.setMessageId(UUID.randomUUID().toString());
-            bloggerMessage.setMessageType(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_BLOGGER);
-            bloggerMessage.setRequestId(UUID.randomUUID().toString());
+            bloggerEntities.add(bloggerEntity);
+        }
 
-            activeMqMessageSend.sendMessageWithPersistence(bloggerMessage,Constants.BLOGGER_QUEUE_NAME);
+        BloggerListMessage bloggerListMessage = new BloggerListMessage();
+        bloggerListMessage.setBloggerEntities(bloggerEntities);
+        bloggerListMessage.setMessageId(UUID.randomUUID().toString());
+        bloggerListMessage.setMessageType(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_BLOGGER_LIST);
+        bloggerListMessage.setRequestId(UUID.randomUUID().toString());
+
+        activeMqMessageSend.sendMessageWithPersistence(bloggerListMessage,Constants.BLOGGER_QUEUE_NAME);
+    }
+
+    private class BloggerListMessage extends BaseMessage {
+
+        private List<BloggerEntity> bloggerEntities;
+
+        public List<BloggerEntity> getBloggerEntities() {
+            return bloggerEntities;
+        }
+
+        public void setBloggerEntities(List<BloggerEntity> bloggerEntities) {
+            this.bloggerEntities = bloggerEntities;
         }
     }
 
@@ -99,7 +116,8 @@ public class BloggerRelationPageParserService {
     private void updateBlogger(BloggerRelationPageParserMessage bloggerRelationPageParserMessage,
                                String body,List<String> bloggerList) {
 
-        BloggerEntity entity = bloggerDao.queryByBloggerName(bloggerRelationPageParserMessage.getBloggerName());
+        String bloggerName = bloggerRelationPageParserMessage.getBloggerName();
+        BloggerEntity entity = bloggerDao.queryByBloggerName(bloggerName);
         if (null == entity) {
             return;
         }
@@ -142,7 +160,7 @@ public class BloggerRelationPageParserService {
                 } else {
                     e.setFetchFollowerPage(1);
                 }
-
+                e.setBloggerName(bloggerName);
                 bloggerDao.updateBloggerEntity(e,id);
             } else {
                 BloggerEntity e = new BloggerEntity();
@@ -157,6 +175,7 @@ public class BloggerRelationPageParserService {
                 } else {
                     e.setFetchFolloweePage(1);
                 }
+                e.setBloggerName(bloggerName);
                 bloggerDao.updateBloggerEntity(e,id);
             }
 
@@ -168,10 +187,12 @@ public class BloggerRelationPageParserService {
                         BloggerEntity e = new BloggerEntity();
                         e.setIsRelation(1);
                         e.setFetchFollowerPage(fetch);
+                        e.setBloggerName(bloggerName);
                         bloggerDao.updateBloggerEntity(e,id);
                     } else {
                         BloggerEntity e = new BloggerEntity();
                         e.setFetchFollowerPage(fetch);
+                        e.setBloggerName(bloggerName);
                         bloggerDao.updateBloggerEntity(e,id);
                     }
                 }
@@ -182,10 +203,12 @@ public class BloggerRelationPageParserService {
                         BloggerEntity e = new BloggerEntity();
                         e.setIsRelation(1);
                         e.setFetchFolloweePage(fetch);
+                        e.setBloggerName(bloggerName);
                         bloggerDao.updateBloggerEntity(e,id);
                     } else {
                         BloggerEntity e = new BloggerEntity();
                         e.setFetchFolloweePage(fetch);
+                        e.setBloggerName(bloggerName);
                         bloggerDao.updateBloggerEntity(e,id);
                     }
                 }

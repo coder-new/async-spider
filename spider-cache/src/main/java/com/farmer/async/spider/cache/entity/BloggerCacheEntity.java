@@ -1,26 +1,15 @@
-package com.farmer.async.spider.save.entity;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+package com.farmer.async.spider.cache.entity;
 
 /**
  * @Author farmer-coder
  * @Email aprimecoder@gmail.com
- * @Date Create at : 2018/1/18
+ * @Date Create at : 2018/3/3
  */
-@Table(name="spider_blogger")
-public class BloggerEntity {
+public class BloggerCacheEntity {
 
-    @Id
-    @GeneratedValue(generator = "JDBC")
     private Integer id;
 
     private String bloggerName;
-
-    private String bloggerUrl;
-
-    private String bloggerUid;
 
     private Integer isRelation;
 
@@ -35,7 +24,10 @@ public class BloggerEntity {
     @Override
     public String toString() {
 
-        return "bloggerName : " + bloggerName + " bloggerUrl: " + bloggerUrl;
+        return "id : " + id + " bloggerName : " + bloggerName
+                + " isRelation : " + isRelation + " maxFolloweePage : " + maxFolloweePage
+                + " maxFollowerPage : " + maxFollowerPage + " fetchFolloweePage : " + fetchFolloweePage
+                + " fetchFollowerPage : " + fetchFollowerPage;
     }
 
     public Integer getId() {
@@ -54,20 +46,12 @@ public class BloggerEntity {
         this.bloggerName = bloggerName;
     }
 
-    public String getBloggerUrl() {
-        return bloggerUrl;
+    public Integer getIsRelation() {
+        return isRelation;
     }
 
-    public void setBloggerUrl(String bloggerUrl) {
-        this.bloggerUrl = bloggerUrl;
-    }
-
-    public String getBloggerUid() {
-        return bloggerUid;
-    }
-
-    public void setBloggerUid(String bloggerUid) {
-        this.bloggerUid = bloggerUid;
+    public void setIsRelation(Integer isRelation) {
+        this.isRelation = isRelation;
     }
 
     public Integer getMaxFolloweePage() {
@@ -100,13 +84,5 @@ public class BloggerEntity {
 
     public void setFetchFollowerPage(Integer fetchFollowerPage) {
         this.fetchFollowerPage = fetchFollowerPage;
-    }
-
-    public Integer getIsRelation() {
-        return isRelation;
-    }
-
-    public void setIsRelation(Integer isRelation) {
-        this.isRelation = isRelation;
     }
 }

@@ -4,6 +4,7 @@ import com.farmer.async.spider.message.Constants;
 import com.farmer.async.spider.message.MessageType;
 import com.farmer.async.spider.message.core.ActiveMqMessageSend;
 import com.farmer.async.spider.parser.message.BloggerRelationPageParserMessage;
+import com.farmer.async.spider.request.CallBackExecute;
 import com.farmer.async.spider.request.RestTemplateHttpClient;
 import com.farmer.async.spider.request.message.BloggerRelationDownloadMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +28,25 @@ public class BloggerRelationDownloadService {
 
     public void handle(BloggerRelationDownloadMessage bloggerRelationDownloadMessage) {
 
-        String body = restTemplateHttpClient.get(bloggerRelationDownloadMessage.getBloggerRelationPageUrl());
+        String url = bloggerRelationDownloadMessage.getBloggerRelationPageUrl();
+        restTemplateHttpClient.asyncGet(url, body -> {
+            if (null == body) {
+                return;
+            }
+            BloggerRelationPageParserMessage bloggerRelationPageParserMessage
+                    = new BloggerRelationPageParserMessage();
+            bloggerRelationPageParserMessage
+                    .setMessageType(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_PAGE_PARSER);
+            bloggerRelationPageParserMessage.setMessageId(UUID.randomUUID().toString());
+            bloggerRelationPageParserMessage.setRequestId("");
+            bloggerRelationPageParserMessage.setBloggerName(bloggerRelationDownloadMessage.getBloggerName());
+            bloggerRelationPageParserMessage.setBloggerUid(bloggerRelationDownloadMessage.getBloggerUid());
+            bloggerRelationPageParserMessage.setBody(body);
+            bloggerRelationPageParserMessage.setPageIndex(bloggerRelationDownloadMessage.getPageIndex());
+            bloggerRelationPageParserMessage.setFollower(bloggerRelationDownloadMessage.getFollower());
 
-        BloggerRelationPageParserMessage bloggerRelationPageParserMessage
-                = new BloggerRelationPageParserMessage();
-        bloggerRelationPageParserMessage
-                .setMessageType(MessageType.Cnblog.BloggerRelation.CNBLOG_BLOGGER_RELATION_PAGE_PARSER);
-        bloggerRelationPageParserMessage.setMessageId(UUID.randomUUID().toString());
-        bloggerRelationPageParserMessage.setRequestId("");
-        bloggerRelationPageParserMessage.setBloggerName(bloggerRelationDownloadMessage.getBloggerName());
-        bloggerRelationPageParserMessage.setBloggerUid(bloggerRelationDownloadMessage.getBloggerUid());
-        bloggerRelationPageParserMessage.setBody(body);
-        bloggerRelationPageParserMessage.setPageIndex(bloggerRelationDownloadMessage.getPageIndex());
-        bloggerRelationPageParserMessage.setFollower(bloggerRelationDownloadMessage.getFollower());
+            activeMqMessageSend.sendMessageWithPersistence(bloggerRelationPageParserMessage, Constants.PARSER_QUEUE_NAME);
+        });
 
-        activeMqMessageSend.sendMessageWithPersistence(bloggerRelationPageParserMessage, Constants.PARSER_QUEUE_NAME);
     }
 }

@@ -1,7 +1,10 @@
 package com.farmer.async.spider.save.dao;
 
+import com.farmer.async.spider.cache.entity.BloggerCacheEntity;
+import com.farmer.async.spider.cache.manager.BloggerCacheManager;
 import com.farmer.async.spider.save.entity.BloggerEntity;
 import com.farmer.async.spider.save.mapper.BloggerMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.ibatis.session.RowBounds;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,12 @@ public class BloggerDao {
     @Autowired
     private BloggerMapper bloggerMapper;
 
+    @Autowired
+    private BloggerCacheManager bloggerCacheManager;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     public void saveList(List<BloggerEntity> bloggerEntities) {
 
         List<BloggerEntity> entities = notExistBloggerList(bloggerEntities);
@@ -41,6 +50,11 @@ public class BloggerDao {
         BloggerEntity entity = queryByBloggerName(bloggerEntity.getBloggerName());
         if (null == entity) {
             bloggerMapper.insert(bloggerEntity);
+            BloggerCacheEntity bloggerCacheEntity = objectMapper.convertValue(bloggerEntity,BloggerCacheEntity.class);
+
+            LOGGER.info("save cache : {}",bloggerCacheEntity.toString());
+
+            bloggerCacheManager.save(bloggerCacheEntity);
         }
     }
 
@@ -90,6 +104,12 @@ public class BloggerDao {
 
     public BloggerEntity queryByBloggerName(String bloggerName) {
 
+        BloggerCacheEntity bloggerCacheEntity = bloggerCacheManager.queryByBloggerName(bloggerName);
+        if (null != bloggerCacheEntity) {
+            LOGGER.info("***************cache******************");
+            return objectMapper.convertValue(bloggerCacheEntity,BloggerEntity.class);
+        }
+
         Example example = new Example(BloggerEntity.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("bloggerName",bloggerName);
@@ -98,6 +118,8 @@ public class BloggerDao {
         if ((null == bloggerEntities) || bloggerEntities.size() == 0) {
             return null;
         }
+        BloggerCacheEntity cacheEntity = objectMapper.convertValue(bloggerEntities.get(0),BloggerCacheEntity.class);
+        bloggerCacheManager.save(cacheEntity);
         return bloggerEntities.get(0);
     }
 
@@ -138,5 +160,37 @@ public class BloggerDao {
         criteria.andEqualTo("id",id);
 
         bloggerMapper.updateByExampleSelective(bloggerEntity,example);
+
+        String bloggerName = bloggerEntity.getBloggerName();
+        BloggerCacheEntity bloggerCacheEntity = bloggerCacheManager.queryByBloggerName(bloggerName);
+        if (null == bloggerCacheEntity) {
+            List<BloggerEntity> entitys = bloggerMapper.selectByExample(example);
+            if (null != entitys && entitys.size() > 0 ) {
+                BloggerEntity entity = entitys.get(0);
+                bloggerCacheEntity = objectMapper.convertValue(entity,BloggerCacheEntity.class);
+                bloggerCacheManager.save(bloggerCacheEntity);
+            }
+
+            return;
+        }
+        if (null != bloggerEntity.getFetchFolloweePage()) {
+            bloggerCacheEntity.setFetchFolloweePage(bloggerEntity.getFetchFolloweePage());
+        }
+        if (null != bloggerEntity.getFetchFollowerPage()) {
+            bloggerCacheEntity.setFetchFollowerPage(bloggerEntity.getFetchFollowerPage());
+        }
+        if (null != bloggerEntity.getMaxFolloweePage()) {
+            bloggerCacheEntity.setMaxFolloweePage(bloggerEntity.getMaxFolloweePage());
+        }
+        if (null != bloggerEntity.getMaxFollowerPage()) {
+            bloggerCacheEntity.setMaxFollowerPage(bloggerEntity.getMaxFollowerPage());
+        }
+        if (null != bloggerEntity.getIsRelation()) {
+            bloggerCacheEntity.setIsRelation(bloggerEntity.getIsRelation());
+        }
+
+        LOGGER.info("update cache : {}",bloggerCacheEntity.toString());
+
+        bloggerCacheManager.save(bloggerCacheEntity);
     }
 }

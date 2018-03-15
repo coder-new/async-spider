@@ -6,10 +6,12 @@ import com.farmer.async.spider.message.core.ActiveMqMessageSend;
 import com.farmer.async.spider.request.message.BloggerRelationDownloadMessage;
 import com.farmer.async.spider.save.dao.BloggerDao;
 import com.farmer.async.spider.save.entity.BloggerEntity;
+import com.farmer.async.spider.service.message.BloggerListMessage;
 import com.farmer.async.spider.service.message.BloggerMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -32,6 +34,15 @@ public class BloggerService {
         bloggerDao.save(bloggerEntity);
 
         sendDownLoadMessage(bloggerEntity);
+    }
+
+    public void handleList(BloggerListMessage bloggerListMessage) {
+
+        List<BloggerEntity> bloggerEntities = bloggerListMessage.getBloggerEntities();
+        for (BloggerEntity bloggerEntity : bloggerEntities) {
+            bloggerDao.save(bloggerEntity);
+            sendDownLoadMessage(bloggerEntity);
+        }
     }
 
     public void sendDownLoadMessage(BloggerEntity bloggerEntity) {

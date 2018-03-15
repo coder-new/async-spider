@@ -6,6 +6,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
+import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -21,6 +24,9 @@ public class RestTemplateHttpClient {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private AsyncRestTemplate asyncRestTemplate;
 
     @Autowired
     private CookieManager cookieManager;
@@ -40,5 +46,33 @@ public class RestTemplateHttpClient {
         }
 
         return null;
+    }
+
+    public void asyncGet(String url,CallBackExecute callBackExecute) {
+
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.add("Cookie",cookieManager.getCookie());
+
+        HttpEntity<String> requestEntity = new HttpEntity<>(null, requestHeaders);
+        ListenableFuture<ResponseEntity<String>> forEntity
+                = asyncRestTemplate.exchange(url, HttpMethod.GET, requestEntity, String.class);
+        forEntity.addCallback(new ListenableFutureCallback<ResponseEntity<String>>() {
+            @Override
+            public void onFailure(Throwable ex) {
+                LOGGER.error("get url : {} error : {}",url, ex.getMessage());
+            }
+
+            @Override
+            public void onSuccess(ResponseEntity<String> result) {
+
+                int statusCodeValue = result.getStatusCodeValue();
+                if (200 == statusCodeValue) {
+                    callBackExecute.execute(result.getBody());
+                } else {
+                    LOGGER.error("get url : {} error,status : {}",url,statusCodeValue);
+                }
+
+            }
+        });
     }
 }
